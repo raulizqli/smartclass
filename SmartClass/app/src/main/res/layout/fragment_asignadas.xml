@@ -1,0 +1,64 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" tools:context="raulizq.smartclass.AsignadasFragment">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:id="@+id/asignadas"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <Spinner
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/sp_asignadas"
+                android:layout_gravity="center_horizontal|top"
+                android:layout_marginTop="@dimen/abc_action_button_min_height_material" />
+            <LinearLayout
+                android:id="@+id/actividades"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <Spinner
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/sp_actividades"
+                    android:layout_gravity="center_horizontal|top"
+                    android:layout_marginTop="@dimen/abc_action_button_min_height_material" />
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/tareas"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <Spinner
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/sp_tareas"
+                    android:layout_gravity="center_horizontal|top"
+                    android:layout_marginTop="@dimen/abc_action_button_min_height_material" />
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/cont_responder"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="Seleccionar recurso"
+                    android:id="@+id/recursos"/>
+            </LinearLayout>
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Responder"
+                android:id="@+id/guardar"/>
+            <Space
+                android:layout_width="130px"
+                android:layout_height="130px" />
+        </LinearLayout>
+    </ScrollView>
+</FrameLayout>
