@@ -813,7 +813,6 @@ public class DbClassHelper extends SQLiteOpenHelper {
     public List<Tarea> getMyTareas(Alumno alumno){
         List<Tarea> contactList = new ArrayList<Tarea>();
         // Select All Query
-
         String selectQuery = "SELECT id, descripcion, contenido, recurso FROM tbl_tareas WHERE id IN(" +
                 "SELECT G.tarea_id " +
                 " FROM tbl_grupos_tareas AS G" +
@@ -841,8 +840,6 @@ public class DbClassHelper extends SQLiteOpenHelper {
 
     public List<Actividad> getMyActividades(Alumno alumno){
         List<Actividad> contactList = new ArrayList<Actividad>();
-        // Select All Query
-
         String selectQuery = "SELECT id, descripcion, contenido, recurso FROM tbl_actividades WHERE id IN(" +
                 "SELECT G.actividad_id " +
                 " FROM tbl_grupos_actividades AS G" +
@@ -892,5 +889,44 @@ public class DbClassHelper extends SQLiteOpenHelper {
         String query ="INSERT INTO tbl_tareas_alumnos(grupos_tareas_id, alumno_id, recursos, calificacion)"
                 +" VALUES("+det_id+","+alumno.getId()+", '"+ tarea.getRecursos() +"', -1);";
         db.execSQL(query);
+    }
+
+    public List<TareaAlumno> getUncheckedTareas(Profesor profesor){
+        //List<Alumno> alumnos = this.getAllAlumnos(profesor);
+        List<TareaAlumno> tareaAlumnos = new ArrayList<>();
+        String selectQuery = "SELECT A.alumno_id, A.nombre, A.tarea_id, T.descripcion " +
+                "FROM(SELECT A.alumno_id, A.nombre, T.tarea_id " +
+                " FROM (SELECT TA.alumno_id, (A.nombre || ' ' || A.paterno || ' ' || A.materno) as nombre," +
+                " TA.grupos_tareas_id" +
+                " FROM tbl_tareas_alumnos AS TA " +
+                " INNER JOIN tbl_alumnos AS A"+
+                " ON grupos_tareas_id NOT IN(" +
+                "   SELECT G.id " +
+                "   FROM tbl_grupos_tareas AS G" +
+                "   INNER JOIN(" +
+                "       SELECT G.id AS grupo_id " +
+                "       FROM tbl_detalle_grupos AS G " +
+                "       INNER JOIN tbl_profesores AS P" +
+                "           ON P.num_empleado = G.profesor_id " +
+                "           AND P.num_empleado = "+profesor.getId()+") AS P " +
+                "   ON P.grupo_id = G.id)" +
+                "   AND TA.calificacion = -1 AND A.matricula = TA.alumno_id) AS A " +
+                " INNER JOIN tbl_grupos_tareas AS T " +
+                " ON T.id = A.grupos_tareas_id) AS A " +
+                " INNER JOIN tbl_tareas AS T " +
+                " ON T.id = A.tarea_id;";
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        if (cursor.moveToFirst()) {
+            do {
+                Alumno contact = new Alumno(Integer.parseInt(cursor.getString(0))
+                        , cursor.getString(1));
+                Tarea tarea = new Tarea(Integer.parseInt(cursor.getString(2)), cursor.getString(3));
+                tareaAlumnos.add(new TareaAlumno(tarea, contact));
+            } while (cursor.moveToNext());
+        }
+        return tareaAlumnos;
+
     }
 }

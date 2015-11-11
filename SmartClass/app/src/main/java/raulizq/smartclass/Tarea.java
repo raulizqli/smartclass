@@ -13,9 +13,13 @@ public class Tarea {
 
     }
 
-    public Tarea(int id, String descripcion, String recursos, String contenido) {
+    public Tarea(int id, String descripcion) {
         this.id = id;
         this.descripcion = descripcion;
+    }
+
+    public Tarea(int id, String descripcion, String recursos, String contenido) {
+        this(id,descripcion);
         this.recursos = recursos;
         this.contenido = contenido;
     }
