@@ -4,6 +4,7 @@ package raulizq.smartclass;
  * Created by raulizq on 11/11/15.
  */
 public class TareaAlumno {
+    public int id;
     public Tarea tarea;
     public Alumno alumno;
     public double calificacion;
@@ -12,7 +13,8 @@ public class TareaAlumno {
 
     }
 
-    public TareaAlumno(Tarea tarea, Alumno alumno){
+    public TareaAlumno(int id, Tarea tarea, Alumno alumno){
+        this.id = id;
         this.tarea = tarea;
         this.alumno = alumno;
     }
@@ -39,5 +41,13 @@ public class TareaAlumno {
 
     public void setCalificacion(double calificacion) {
         this.calificacion = calificacion;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

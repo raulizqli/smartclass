@@ -79,7 +79,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
         db = new DbClassHelper(this);
-        db.onUpgrade(db.getWritableDatabase(),2,3);
+        //db.onUpgrade(db.getWritableDatabase(),2,3);
     }
 
     private void populateAutoComplete() {

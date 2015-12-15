@@ -894,10 +894,10 @@ public class DbClassHelper extends SQLiteOpenHelper {
     public List<TareaAlumno> getUncheckedTareas(Profesor profesor){
         //List<Alumno> alumnos = this.getAllAlumnos(profesor);
         List<TareaAlumno> tareaAlumnos = new ArrayList<>();
-        String selectQuery = "SELECT A.alumno_id, A.nombre, A.tarea_id, T.descripcion " +
-                "FROM(SELECT A.alumno_id, A.nombre, T.tarea_id " +
+        String selectQuery = "SELECT A.id, A.alumno_id, A.nombre, A.tarea_id, T.descripcion " +
+                "FROM(SELECT A.id, A.alumno_id, A.nombre, T.tarea_id " +
                 " FROM (SELECT TA.alumno_id, (A.nombre || ' ' || A.paterno || ' ' || A.materno) as nombre," +
-                " TA.grupos_tareas_id" +
+                " TA.grupos_tareas_id, TA.id" +
                 " FROM tbl_tareas_alumnos AS TA " +
                 " INNER JOIN tbl_alumnos AS A"+
                 " ON grupos_tareas_id NOT IN(" +
@@ -920,13 +920,22 @@ public class DbClassHelper extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery(selectQuery, null);
         if (cursor.moveToFirst()) {
             do {
-                Alumno contact = new Alumno(Integer.parseInt(cursor.getString(0))
-                        , cursor.getString(1));
-                Tarea tarea = new Tarea(Integer.parseInt(cursor.getString(2)), cursor.getString(3));
-                tareaAlumnos.add(new TareaAlumno(tarea, contact));
+                Alumno contact = new Alumno(Integer.parseInt(cursor.getString(1))
+                        , cursor.getString(2));
+                Tarea tarea = new Tarea(Integer.parseInt(cursor.getString(3)), cursor.getString(0));
+                tareaAlumnos.add(new TareaAlumno(Integer.parseInt(cursor.getString(0)), tarea, contact));
             } while (cursor.moveToNext());
         }
         return tareaAlumnos;
 
+    }
+
+    public void setRevisionTareas(List<TareaAlumno> tareas){
+        SQLiteDatabase db = this.getWritableDatabase();
+        for (TareaAlumno t: tareas) {
+            String query ="UPDATE tbl_tareas_alumnos SET calificacion = "+t.getCalificacion()
+                    + " WHERE id = "+ t.getId() +");";
+            db.execSQL(query);
+        }
     }
 }
